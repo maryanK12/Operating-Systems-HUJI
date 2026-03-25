@@ -1,0 +1,87 @@
+mona.zoabi, maryan.kiwan
+EX: 2
+
+FILES:
+Thread.cpp
+Thread.h
+uthreads.cpp
+uthread.h
+makefile
+README
+
+Assignment 2
+
+ANSWERS:
+
+Part 1: Theoretical Questions 
+1-
+a. Describe what the functions sigsetjmp and siglongjmp do.
+
+sigsetjmp() and siglongjmp() are two functions in C library that allow for non-local jumps in signal handlers.
+sigsetjmp() sets a jump point and saves the current signal mask, returning zero. It also saves the processor state at
+the point of the jump. siglongjmp() performs the non-local jump to the point set by sigsetjmp(), restoring the saved
+signal mask and processor state.
+In other words, these functions allow a program to handle signals and exceptions in a controlled manner,
+allowing the program to gracefully handle errors and avoid unexpected crashes.
+
+b.Describe how sigsetjmp and siglongjmp affect masking.
+
+sigsetjmp() and siglongjmp() affect signal masking by saving and restoring the signal mask of the calling process.
+When sigsetjmp() is called, it saves the current signal mask, which can be modified using the sigprocmask() function.
+If a signal is received and its corresponding signal handler is executed, the saved signal mask is restored when
+siglongjmp() is called. This ensures that signals that were blocked before the jump point are still blocked after the
+jump is performed. Therefore, sigsetjmp() and siglongjmp() provide a way to temporarily modify the signal mask during a
+ signal handler's execution while ensuring that the signal mask is restored to its original state after the handler
+ completes its execution.
+
+2. Describe one general use of user-level threads and explain why user-level threads are a
+reasonable choice for your example
+
+One general use of user-level threads is in implementing cooperative multitasking in applications that need to perform
+multiple tasks simultaneously without blocking the entire process. For example, a web server that needs to handle
+multiple incoming connections simultaneously can use user-level threads to achieve this.
+User-level threads are a reasonable choice for this example because they are lightweight and can be scheduled and
+managed entirely in user space, without kernel involvement. This allows for more efficient context switching and better
+control over the scheduling algorithm. Additionally, user-level threads provide a high degree of flexibility in managing
+thread execution, allowing the programmer to prioritize, pause, and resume threads as needed.
+
+3. Google’s Chrome browser creates a new process for each tab. What are the advantages and disadvantages of creating the
+new process (instead of creating a kernel-level thread)?
+
+Advantages of creating a new process for each tab in Google Chrome include improved security and stability.
+Because each process has its own memory space, a security vulnerability or crash in one tab/process does not affect
+ othertabs/processes. Additionally, the use of multiple processes allows Chrome to take advantage of modern multicore
+ processors,providing better performance and responsiveness.
+Disadvantages include increased memory usage and overhead due to the need to create and manage multiple processes.
+Additionally, the inter-process communication (IPC) required to share information between processes can be slower than
+thread communication within a single process. Finally, the use of multiple processes can make debugging more complex due
+to the increased number of processes involved.
+
+4.Interrupts and signals:
+a. Open an application (for example, “Shotwell” on one of the CS computers). Use the “ps -A” command to extract the
+ application’s pid (process ID).
+b. Open a shell and type “kill pid”.
+c. Explain which interrupts and signals are involved during the command execution,what triggered them and who
+should handle them. In your answer, refer to the keyboard, OS, shell, and the application you just killed.
+
+When the "kill pid" command is executed in the shell, it sends a signal to the process with the specified process ID.
+By default, the signal sent is SIGTERM, which is a termination signal that allows the process to clean up before exiting.
+If the process does not exit after a certain amount of time, a subsequent SIGKILL signal can be sent, which immediately
+terminates the process without allowing it to perform any cleanup operations.
+Internally, when a process receives a signal, the signal is delivered to a signal handler function specified by the
+process.If no signal handler is specified for the signal, the default action for the signal is taken. For SIGTERM,
+the defaultaction is to terminate the process, while for SIGKILL, the process is immediately terminated without any
+ cleanup.
+The signal handler can also specify actions to take when the signal is received, such as saving state,
+cleaning up resources,or ignoring the signal entirely.
+
+5.What is the difference between ‘real’ and ‘virtual’ time? Give one example of using each.
+
+Real time is the actual time elapsed between the start and end of a process, while virtual time is the time that a
+process would take to execute if it had exclusive access to the CPU without any interference or delay from other
+ processes.
+One example of using real time is in measuring the actual duration of a video or audio recording.
+The real time elapsed during the recording corresponds directly to the length of the recorded content.
+One example of using virtual time is in scheduling algorithms, where the CPU time allocated to a process is based on its
+estimated virtual time, rather than the actual time it takes to execute. This allows the scheduler to balance the use of
+the CPU across multiple processes, even if they have different execution times or resource requirements.
