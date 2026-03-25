@@ -1,0 +1,9 @@
+mona.zoabi, maryan.kiwan
+EX: 3
+
+FILES:
+MapReduceFramework.cpp
+makefile
+README
+Barrier.cpp
+Barrier.h
